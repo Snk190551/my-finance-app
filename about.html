@@ -34,7 +34,7 @@
 
         <!-- Page Content -->
         <div class="flex-1 flex flex-col items-center justify-center text-center">
-          
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">เกี่ยวกับฉัน</h2>
             
             <!-- Registration and Login Section -->
             <div id="auth-section" class="w-full max-w-sm space-y-6">
@@ -57,7 +57,8 @@
                         </button>
                     </form>
                     <p class="text-center mt-4 text-sm text-gray-600">
-                        <p>มีบัญชีแล้ว?<a href="login.html" style="color: #007BFF;">เข้าสู่ระบบที่นี่</a>
+                        มีบัญชีแล้ว? <a href="#" id="show-login" class="text-indigo-600 font-semibold hover:underline">เข้าสู่ระบบที่นี่</a>
+                    </p>
                 </div>
 
                 <!-- Login Form -->
@@ -299,7 +300,6 @@
                     // This is a new user from custom auth token, show registration form
                     authSection.classList.remove('hidden');
                     userSection.classList.add('hidden');
-                    // show registration form
                     regContainer.classList.remove('hidden');
                     loginContainer.classList.add('hidden');
                 }
@@ -307,7 +307,6 @@
                 // User is signed out
                 authSection.classList.remove('hidden');
                 userSection.classList.add('hidden');
-                // show registration form by default
                 regContainer.classList.remove('hidden');
                 loginContainer.classList.add('hidden');
             }
@@ -318,64 +317,3 @@
     </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <title>เกี่ยวกับฉัน</title>
-  <style>
-    body {
-      font-family: 'Prompt', sans-serif;
-      background-color: #f0f8ff;
-      padding: 30px;
-      color: #333;
-    }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .welcome {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-    }
-    .info-box {
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-      margin-top: 20px;
-    }
-    .button-group a {
-      display: inline-block;
-      margin-top: 15px;
-      margin-right: 10px;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-decoration: none;
-      color: white;
-    }
-    .btn-history {
-      background-color: #007BFF;
-    }
-    .btn-invest {
-      background-color: #28A745;
-    }
-    blockquote {
-      margin-top: 30px;
-      font-style: italic;
-      color: #555;
-    }
-    .login-link {
-      color: #007BFF;
-      text-decoration: none;
-    }
-    .login-link:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>

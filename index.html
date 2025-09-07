@@ -81,6 +81,11 @@
                 </button>
             </form>
             
+            <!-- Inflation Rate Input -->
+            <div class="bg-gray-50 p-6 rounded-xl shadow-inner mb-6">
+                <label for="inflation-rate-input" class="block text-gray-700 font-medium mb-1">อัตราเงินเฟ้อต่อปี (%)</label>
+                <input type="number" id="inflation-rate-input" value="3.5" class="w-full p-3 rounded-md border-2 border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-colors duration-200" step="0.1">
+            </div>
 
             <!-- Transaction History List -->
             <div class="bg-white p-6 rounded-xl shadow-lg">
@@ -94,7 +99,7 @@
 
     <!-- JavaScript to handle app logic -->
     <script>
-        // รับอ้างอิงถึง DOM elements
+        // Get references to DOM elements
         const transactionForm = document.getElementById('transaction-form');
         const transactionsList = document.getElementById('transactions-list');
         const dateInput = document.getElementById('date-input');
@@ -103,27 +108,25 @@
         const amountInput = document.getElementById('amount-input');
         const inflationRateInput = document.getElementById('inflation-rate-input');
         
-        // โหลดข้อมูลจาก localStorage หรือใช้ array ว่างถ้ายังไม่มี
+        // Load data from localStorage or use an empty array
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-        // ฟังก์ชันสำหรับคำนวณมูลค่าที่ปรับตามเงินเฟ้อ
+        // Function to calculate inflation-adjusted value
         function calculateInflationAdjustedValue(amount, transactionDate, inflationRate) {
             const today = new Date();
             const transactionDay = new Date(transactionDate);
             const years = (today - transactionDay) / (1000 * 60 * 60 * 24 * 365.25);
-            // Adjusted Amount = Original Amount * (1 + inflation rate)^years
             return amount * Math.pow(1 + (inflationRate / 100), years);
         }
 
-        // ฟังก์ชันสำหรับแสดงรายการธุรกรรม
+        // Function to render transactions
         function renderTransactions() {
-            // เรียงลำดับรายการตามวันที่จากใหม่ไปเก่า
             const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-            transactionsList.innerHTML = ''; // ล้างรายการเก่าก่อน render ใหม่
+            transactionsList.innerHTML = '';
             const inflationRate = parseFloat(inflationRateInput.value) || 0;
 
             if (sortedTransactions.length === 0) {
-                transactionsList.innerHTML = '<p class="text-center text-gray-400 p-4">ยังไม่มีรายการ</p>';
+                transactionsList.innerHTML = '<p class="text-center text-gray-400 p-4">No transactions yet.</p>';
                 return;
             }
 
@@ -134,8 +137,6 @@
                 const adjustedAmount = calculateInflationAdjustedValue(transaction.amount, transaction.date, inflationRate);
                 
                 const itemDiv = document.createElement('div');
-                
-                // ใส่ class ของ Tailwind CSS เพื่อตกแต่ง
                 itemDiv.className = 'flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm';
                 itemDiv.innerHTML = `
                     <div class="flex-1">
@@ -147,7 +148,7 @@
                             ${sign}${transaction.amount.toLocaleString()} บาท
                         </div>
                         <div class="text-xs text-gray-400 mt-1">
-                            (มูลค่าปัจจุบัน: ${adjustedAmount.toLocaleString('th-TH', { maximumFractionDigits: 2 })} บาท)
+                            (Current Value: ${adjustedAmount.toLocaleString('th-TH', { maximumFractionDigits: 2 })} บาท)
                         </div>
                     </div>
                 `;
@@ -155,9 +156,9 @@
             });
         }
 
-        // ฟังก์ชันสำหรับจัดการการส่งฟอร์ม
+        // Function to handle form submission
         function addTransaction(event) {
-            event.preventDefault(); // ป้องกันการรีโหลดหน้าเว็บ
+            event.preventDefault();
 
             const newTransaction = {
                 date: dateInput.value,
@@ -167,29 +168,23 @@
             };
 
             transactions.push(newTransaction);
-            localStorage.setItem('transactions', JSON.stringify(transactions)); // บันทึกข้อมูลลง localStorage
+            localStorage.setItem('transactions', JSON.stringify(transactions));
 
-            // ล้างข้อมูลในฟอร์มและแสดงรายการใหม่
             dateInput.value = '';
             categoryInput.value = '';
             amountInput.value = '';
-            // กำหนดวันที่เริ่มต้นให้เป็นวันที่ปัจจุบันเสมอ
             const today = new Date().toISOString().split('T')[0];
             dateInput.value = today;
             renderTransactions();
         }
 
-        // ตั้งวันที่เริ่มต้นให้เป็นวันที่ปัจจุบัน
         const today = new Date().toISOString().split('T')[0];
         dateInput.value = today;
 
-        // เพิ่ม Event Listener ให้กับฟอร์มและ input เงินเฟ้อ
         transactionForm.addEventListener('submit', addTransaction);
         inflationRateInput.addEventListener('input', renderTransactions);
 
-        // แสดงรายการครั้งแรกเมื่อหน้าเว็บโหลด
         renderTransactions();
     </script>
 </body>
 </html>
-<div id="summary"></div>
